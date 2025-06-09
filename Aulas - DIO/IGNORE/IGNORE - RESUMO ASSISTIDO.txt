@@ -1,0 +1,168 @@
+Atenção: A maioria dos comandos que mexem em arquivos ou pastas age na pasta onde você está aberto no terminal, por isso é importante estar no lugar certo antes de executar.
+
+Códigos:
+Aula 1 - Configurando o Git:
+git config --global user.name "[digite o nome]"
+git config --global user.email [digite o email]
+git config user.name
+git config user.email
+git config init.defaultBranch
+git config --global init.defaultBranch main
+git config --global --list
+
+Aula 2 - Autenticando via Token:
+git clone URL-HTTPS
+(O código acima para haver conexão/funcionar corretamente precisa da URL do Token, ou seja, é necessário a criação de um token(classic) caso você não tenha salva suas credencias salva com store ou cache)
+git config --global credential.helper store
+git config --global credential.helper cache
+git config --global credential.helper
+git config --global --show-origin credential.helper
+cat .gitconfig
+(Explique separadamente o comando cat do comando cat .gitconfig)
+cat .git-credentials
+- [Explique como remover credenciais salvas por meio da ferramenta "Gerenciar Credenciais do Windows" no Windows]
+
+Aula 3 - Autenticando via Chave SSH:
+ls - al ~/..ssh
+ssh-keygen -t ed25519 -C "your_email@example.com"
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_ed25519
+- [Criação da chave SSH no GitHub - Authentication Key]
+cd ~/.ssh
+ls
+cat id_ed25519.pub
+git clone (+ link SSH DO GitHub)
+
+Aula 4 - Criando e Clonando Repositórios:
+- Explique: Existem duas formas de obter um repositório Git na sua máquina:
+1 - Transformando um diretório local que não está sob controle de versão, num repositório Git;
+2 - Clonando um repositório Git existente.
+mkdir nome-da-pasta
+cd nome-da-pasta ou nome-do-arquivo
+git init
+- [Explique qual a função/para que serve/ o que é o arquivo .git]
+cat nome-do-arquivo ou nome-da-pasta
+git clone URL nome-do-diretório
+- Explique o que é remote "origin" (nome padrão dado ao repositório remoto de onde você clonou um projeto)
+git remote -v
+git remote add origin URL-HTTPS
+cd ..
+git clone URL --branch feature-1 --single-branch (Caso eu não cite qual branch eu queira clonar ele irá clonar somente a branch principal)
+touch .gitignore
+
+Aula 5 - Salvando Alterações no Repositório Local:
+git status
+touch README.md
+Uso do git status - Explique as Diferenças entre: Untracked files - Changes to be commited - nothing to commit, working tree clean
+git add README.md
+git commit -m"Commit inicial"
+git log
+O git não reconhece pastas/diretórios vazios, para ele reconhecer temos que inserir um arquivo nele, por exemplo, um arquivo .md
+git ignore
+Alguns arquivos não devem ser salvos. Para isso, usamos o .gitignore. O comando echo resumos/ > .gitignore cria esse arquivo e diz ao Git para ignorar a pasta resumos/.
+> Já o comando echo > .gitignore apaga tudo o que estava no arquivo antes, desfazendo o conteúdo anterior.
+touch aulas/.gitkeep - reconheça um diretório vazio
+git add .
+Quando você muda um arquivo que já foi salvo no Git, ele marca como modificado. Se você desfizer essa mudança e deixar o arquivo igual ao que estava, o Git não mostra mais como modificado. - git status
+
+Aula 6 - Desfazendo Alterações no Repositório Local:
+Comando: rm -rf .git - deleta a pasta oculta .git dentro da pasta onde você está no momento (diretório atual).
+git restore README.md ou git restore nome-do-arquivo
+- Como alterar mensagem do último commit:
+git commit --amend -m"nome da nova alteração"
+Desfazer para um commit anterior: git reset --soft + HASH DO COMMIT = Basicamente ele "EXCLUI" o commit anterior e adiciona esses mesmos arquivos na área de preparação
+git reset --mixed + HASH DO COMMIT = Basicamente ele "EXCLUI" o commit anterior e coloca esses arquivos como não rastreados - Untracked files
+git reset --hard + HASH DO COMMIT = Diferente dos outros comandos, ele defaz tudo, é a lixeira universal - exclui tudo do commit especificado no comando
+git reflog
+Explique o que ocorreu nesses códigos abaixo: 1: touch resumos/aula-01.md resumos/aula-02.md
+2: git reset resumos/aula-01.md
+3: git status
+4: git restore --staged resumos/aula-02.md
+
+Aula 7 - Enviando e Baixando Alterações com o Repositório Remoto:
+Explicação do comando + Criei um repositório vazio no GitHub + Sequência de passos:
+git remote add origin + URL GitHub
+git push -u origin main
+git pull
+
+Aula 8 - Trabalhando com Branches - Criando, Mesclando, Deletando e Tratando Conflitos:
+
+Trabalhando com Branches:
+- De maneira simplista, uma Branch (em tradução, "Ramo"), é uma ramificação do seu projeto.
+- É um ponteiro móvel para um commit no histórico do repositório;
+- Quando você cria uma nova Branch a partir de outra existente, a nova se inicia apontando para o mesmo commit da Branch que estava quando foi criada.
+- A nova branch trabalha de maneira "independente"
+- Quando se cria uma nova branch a partir da branch main, ela "copia" os arquivos da branch anterior, isso significa que tudo que estava na branch main estará também na branch nova
+git checkout -b teste
+git log - aparecerá que o último commit está "apontando" para a branch main e teste
+git checkout main
+git branch -v
+git merge teste (nome da branch)
+git branch - aparecerá um "asterisco" dizendo em qual branch estamos agora
+git branch -d teste (nome da branch que deseja exclusão)
+git branch - a branch teste desapareceu e só temos a main
+Explique o Conflito de Merge:
+Conflito de merge acontece quando duas branches alteram a mesma parte de um arquivo
+O Git não consegue decidir qual versão manter e pede que você resolva
+
+Exemplo
+Na branch A: nome = Maria
+Na branch B: nome = João
+Ao fazer git merge, o Git mostra um conflito no arquivo
+
+Como resolver
+Edite o arquivo e escolha o que quer manter
+Remova os marcadores de conflito como <<<<<<<, ======= e >>>>>>>
+Salve o arquivo, depois use git add e git commit - Assim o conflito é resolvido
+
+Aula 9 - Trabalhando com Branches - Comandos Úteis no Dia a Dia:
+
+git pull -> git fetch(baixa) + git merge(mescla)
+git pull seria basicamente a junção desses dois comandos = git fetch(baixa) + git merge(mescla)
+git fetch origin main
+git diff main origin/main
+git merge origin/main
+
+--
+
+git clone URL REPOSITÓRIO REMOTO GITHUB --branch teste --single-branch
+
+--
+
+git stash
+git stash list
+git checkout -b teste-2
+git checkout teste
+git stash list
+git stash pop ou git stash apply
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
